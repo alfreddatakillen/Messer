@@ -147,6 +147,14 @@ function getUserDetails() {
 	})
 }
 
+function timeFormat(time) {
+	const timezoneOffset = (new Date()).getTimezoneOffset() * 60000;
+	return (new Date(time - timezoneOffset))
+		.toISOString()
+		.substring(0, 19)
+		.replace('T', ' ');
+}
+
 /**
  * Handles incoming messages by logging appropriately.
  */
@@ -176,7 +184,7 @@ function handleMessage(message) {
 	}
 
 	if (message.attachments.length == 0)
-		console.log("New message from " + sender + (messageBody || unrenderableMessage))
+		console.log(timeFormat(message.timestamp) + " " + sender + ": " + (messageBody || unrenderableMessage))
 	else {
 		var attachment = message.attachments[0]//only first attachment
 		var attachmentType = attachment.type.replace(/\_/g, " ")
